@@ -1,4 +1,6 @@
 # backoff-decorator
+[![Run Status](https://api.shippable.com/projects/59ec24a1a64bbc0700a68364/badge?branch=master)](https://app.shippable.com/github/unitoio/backoff-decorator)
+[![Coverage Badge](https://api.shippable.com/projects/59ec24a1a64bbc0700a68364/coverageBadge?branch=master)](https://app.shippable.com/github/unitoio/backoff-decorator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This modules allows retrying an asynchronous call, backing off exponentially.
