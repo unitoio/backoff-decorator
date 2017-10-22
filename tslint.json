@@ -68,7 +68,6 @@
     "no-multi-spaces": [true],
     "no-duplicate-variable": true,
     "no-unused-expression": true,
-    "no-unused-new": true,
     "radix": true,
     "no-shadowed-variable": true,
     "no-use-before-declare": true,

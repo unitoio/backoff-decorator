@@ -13,7 +13,7 @@
     "clean": "rm -rf dist/ node_modules/ shippable/ coverage/ *.tgz",
     "compile": "tsc",
     "prepublishOnly": "npm run clean && npm install && npm run compile",
-    "lint": "tslint --type-check -c tslint.json --project tsconfig.json",
+    "lint": "tslint -c tslint.json --project tsconfig.json",
     "test": "npm run compile && npm run coverage",
     "test:ci": "mocha --ui tdd -R xunit 'dist/test/**/*.js' > shippable/testresults/result.xml",
     "coverage": "istanbul cover -x '**/data/**' --print none _mocha 'dist/test/**/*_test.js' && npm run coverage:remap:json && npm run coverage:remap:html && npm run coverage:remap:xml && npm run coverage:report",
@@ -38,7 +38,12 @@
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
     "chai": "^4.1.2",
+    "istanbul": "^0.4.5",
     "mocha": "^3.5.3",
+    "pre-commit": "^1.2.2",
+    "remap-istanbul": "^0.9.5",
+    "tslint": "^5.8.0",
+    "tslint-eslint-rules": "^4.1.1",
     "typescript": "^2.5.2"
   }
 }
