@@ -1,0 +1,44 @@
+{
+  "name": "backoff-decorator",
+  "version": "1.0.0",
+  "description": "Exponential retry backoff library offering full jitter and decorators.",
+  "main": "dist/src/backoff.js",
+  "types": "dist/src/backoff.d.ts",
+  "homepage": "https://github.com/unitoio/backoff-decorator",
+  "author": {
+    "name": "Unito",
+    "email": "hello@unito.io"
+  },
+  "scripts": {
+    "clean": "rm -rf dist/ node_modules/ shippable/ coverage/ *.tgz",
+    "compile": "tsc",
+    "prepublishOnly": "npm run clean && npm install && npm run compile",
+    "lint": "tslint --type-check -c tslint.json --project tsconfig.json",
+    "test": "npm run compile && npm run coverage",
+    "test:ci": "mocha --ui tdd -R xunit 'dist/test/**/*.js' > shippable/testresults/result.xml",
+    "coverage": "istanbul cover -x '**/data/**' --print none _mocha 'dist/test/**/*_test.js' && npm run coverage:remap:json && npm run coverage:remap:html && npm run coverage:remap:xml && npm run coverage:report",
+    "coverage:remap:json": "cd coverage && remap-istanbul -i coverage.json -o coverage-remap.json",
+    "coverage:remap:html": "cd coverage && remap-istanbul -i coverage.json -o html-report -t html",
+    "coverage:remap:xml": "cd coverage && remap-istanbul -i coverage.json -o coverage.xml -t cobertura",
+    "coverage:report": "istanbul report -i coverage/coverage-remap.json --print text-summary"
+  },
+  "keywords": [
+    "typescript",
+    "backoff",
+    "exponential",
+    "jitter",
+    "decorator"
+  ],
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3",
+    "typescript": "^2.5.2"
+  }
+}

@@ -1,0 +1,9 @@
+dist
+node_modules
+.tscache
+.baseDir.ts
+*.tgz
+.DS_Store
+*.swp
+coverage/
+package-lock.json
