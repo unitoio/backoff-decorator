@@ -1,0 +1,37 @@
+language: node_js
+
+node_js:
+  - 6.10.0
+
+env:
+  global:
+    # The path for Xunit to output test reports
+    - XUNIT_FILE=shippable/testresults/result.xml
+    - LC_ALL=C
+
+branches:
+  only:
+    - master
+
+build:
+  ci:
+    - shippable_retry npm install
+    - npm run compile
+    - mkdir -p shippable/testresults
+    - mkdir -p shippable/codecoverage
+    - npm run lint
+    - npm run test:ci
+  on_success:
+    - npm run coverage
+    - cp coverage/coverage.xml shippable/codecoverage/coverage.xml
+
+integrations:
+  notifications:
+    - integrationName: email
+      type: email
+      recipients:
+        - dev@unito.io
+      on_failure: always
+      on_success: never
+      on_pull_request: never
+      on_start: never
