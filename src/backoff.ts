@@ -3,7 +3,8 @@
  * multiplied by a factor, up to a maximum value.
  * Optionally add a full random jitter to that number.
  *
- * @param factor     value by which to multiply the power of two
+ * @param base       base of the exponential value, usually 2 or 1 for fix intervals
+ * @param factor     value by which to multiply the power of base
  * @param maxValue   ceiling to the exponential value (not including the jitter)
  * @param fullJitter If true, add a random number between [0, n] to value n.
  *
@@ -11,13 +12,14 @@
  */
 
 export function* exponentialGenerator(
+  base: number,
   factor: number,
   maxValue: number | undefined,
   fullJitter: boolean | undefined,
 ): IterableIterator<number> {
   let n = 0;
   while (true) { // tslint:disable-line
-    const current = factor * (2 ** n);
+    const current = factor * (base ** n);
     let value = (!maxValue || current < maxValue) ? current : maxValue;
     if (fullJitter) {
       value = Math.random() * value;
@@ -42,6 +44,7 @@ export type PredicateFunction = (result: any) => boolean;
  *
  * @param maxRetries    passed this number, throw an Error
  * @param maxDelayMs    the maximum exponential delay (not including the jitter)
+ * @param base          base of the exponential value, usually 2 or 1 for fix intervals
  * @param backoffFactor the factor to the exponential values
  * @param predicate     a function that returns true when the call is to be retried
  * @param fullJitter    whether to add full random jitter to the exponential delays
@@ -50,6 +53,7 @@ export type PredicateFunction = (result: any) => boolean;
 export interface BackoffOptions {
   maxRetries?: number;
   maxDelayMs?: number;
+  base?: number;
   backoffFactor?: number;
   predicate?: PredicateFunction;
   fullJitter?: boolean;
@@ -72,6 +76,7 @@ export async function retry(
   ...args: any[],
 ): Promise<any> {
   const {
+    base = 2,
     maxRetries = 1,
     maxDelayMs,
     backoffFactor = 50,
@@ -81,7 +86,7 @@ export async function retry(
   } = options;
 
   let numRetries = 1;
-  for (const delayMs of exponentialGenerator(backoffFactor, maxDelayMs, fullJitter)) {
+  for (const delayMs of exponentialGenerator(base, backoffFactor, maxDelayMs, fullJitter)) {
     try {
       const result = await targetFunction.apply(thisArg, args);
       if (thisArg && thisArg.emit) {
