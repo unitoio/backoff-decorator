@@ -17,25 +17,25 @@ describe('backoff', () => {
     const ten = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     it('returns powers of two', () => {
-      const generator = Backoff.exponentialGenerator(1, 1000, false);
+      const generator = Backoff.exponentialGenerator(2, 1, 1000, false);
       const values = ten.map(() => generator.next().value);
       expect(values).to.eql(ten.map(x => 2 ** x));
     });
 
     it('returns maxValue when passed it', () => {
-      const generator = Backoff.exponentialGenerator(1, 32, false);
+      const generator = Backoff.exponentialGenerator(2, 1, 32, false);
       const values = ten.map(() => generator.next().value);
       expect(values).to.eql([1, 2, 4, 8, 16, 32, 32, 32, 32, 32]);
     });
 
     it('multiplies values by a factor', () => {
-      const generator = Backoff.exponentialGenerator(50, 1e6, false);
+      const generator = Backoff.exponentialGenerator(2, 50, 1e6, false);
       const values = ten.map(() => generator.next().value);
       expect(values).to.eql(ten.map(x => 50 * (2 ** x)));
     });
 
     it('can add full jitter', () => {
-      const generator = Backoff.exponentialGenerator(1, 1000, true);
+      const generator = Backoff.exponentialGenerator(2, 1, 1000, true);
       const values = ten.map(() => generator.next().value);
       const expectedMax = ten.map(x => 2 ** x);
       for (const idx in values) {
@@ -43,6 +43,19 @@ describe('backoff', () => {
         expect(values[idx]).to.be.below(expectedMax[idx]);
       }
     });
+
+    it('uses the passed in base', () => {
+      const generator = Backoff.exponentialGenerator(3, 1, 20000, false);
+      const values = ten.map(() => generator.next().value);
+      expect(values).to.eql(ten.map(x => 3 ** x));
+    });
+
+    it('supports a base of 1', () => {
+      const generator = Backoff.exponentialGenerator(1, 12, 10000, false);
+      const values = ten.map(() => generator.next().value);
+      expect(values).to.eql(ten.map(x => 12));
+    });
+
   });
 
   describe('retry', () => {
