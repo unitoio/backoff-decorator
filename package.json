@@ -10,6 +10,7 @@
     "email": "hello@unito.io"
   },
   "scripts": {
+    "audit": "npm audit",
     "clean": "rm -rf dist/ node_modules/ shippable/ coverage/ *.tgz",
     "compile": "tsc",
     "prepublishOnly": "npm run clean && npm install && npm run compile",
@@ -31,7 +32,8 @@
   ],
   "pre-commit": [
     "lint",
-    "test"
+    "test",
+    "audit"
   ],
   "license": "MIT",
   "devDependencies": {
