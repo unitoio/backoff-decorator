@@ -24,6 +24,7 @@ export function* exponentialGenerator(
     if (fullJitter) {
       value = Math.random() * value;
     }
+    value = Math.round(value);
     yield value;
     n++;
   }

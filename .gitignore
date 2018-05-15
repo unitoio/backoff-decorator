@@ -6,4 +6,3 @@ node_modules
 .DS_Store
 *.swp
 coverage/
-package-lock.json
