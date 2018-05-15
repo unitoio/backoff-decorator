@@ -39,8 +39,16 @@ describe('backoff', () => {
       const values = ten.map(() => generator.next().value);
       const expectedMax = ten.map(x => 2 ** x);
       for (const idx in values) {
-        expect(values[idx]).to.be.above(0);
-        expect(values[idx]).to.be.below(expectedMax[idx]);
+        expect(values[idx]).not.to.be.below(0);
+        expect(values[idx]).not.to.be.above(expectedMax[idx]);
+      }
+    });
+
+    it('always returns rounded-up values', () => {
+      const generator = Backoff.exponentialGenerator(2, 5, 1000, true);
+      const values = ten.map(() => generator.next().value);
+      for (const value of values) {
+        expect(Math.round(value)).to.equal(value);
       }
     });
 
