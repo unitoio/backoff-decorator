@@ -119,6 +119,7 @@ describe('backoff', () => {
         assert(false, 'function should throw');
       } catch (err) {
         expect(err.message).to.match(/Maximum of 2 retries/);
+        expect(err).to.be.instanceof(Backoff.RetryError);
       }
     });
 
