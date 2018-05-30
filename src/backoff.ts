@@ -17,16 +17,17 @@ export function* exponentialGenerator(
   base: number,
   factor: number,
   maxValue: number | undefined,
+  minValue: number | undefined,
   fullJitter: boolean | undefined,
 ): IterableIterator<number> {
   let n = 0;
   while (true) { // tslint:disable-line
     const current = factor * (base ** n);
     let value = (!maxValue || current < maxValue) ? current : maxValue;
+    value = minValue ? Math.max(minValue, value) : value;
     if (fullJitter) {
-      value = Math.random() * value;
+      value = Math.round(Math.random() * value);
     }
-    value = Math.round(value);
     yield value;
     n++;
   }
@@ -47,6 +48,7 @@ export type PredicateFunction = (result: any) => boolean;
  *
  * @param maxRetries    passed this number, throw an Error
  * @param maxDelayMs    the maximum exponential delay (not including the jitter)
+ * @param minDelayMs    the minimum exponential delay (not including the jitter)
  * @param base          base of the exponential value, usually 2 or 1 for fix intervals
  * @param backoffFactor the factor to the exponential values
  * @param predicate     a function that returns true when the call is to be retried
@@ -56,6 +58,7 @@ export type PredicateFunction = (result: any) => boolean;
 export interface BackoffOptions {
   maxRetries?: number;
   maxDelayMs?: number;
+  minDelayMs?: number;
   base?: number;
   backoffFactor?: number;
   predicate?: PredicateFunction;
@@ -82,6 +85,7 @@ export async function retry(
     base = 2,
     maxRetries = 1,
     maxDelayMs,
+    minDelayMs,
     backoffFactor = 50,
     predicate,
     fullJitter,
@@ -89,7 +93,7 @@ export async function retry(
   } = options;
 
   let numRetries = 1;
-  for (const delayMs of exponentialGenerator(base, backoffFactor, maxDelayMs, fullJitter)) {
+  for (const delayMs of exponentialGenerator(base, backoffFactor, maxDelayMs, minDelayMs, fullJitter)) {
     try {
       const result = await targetFunction.apply(thisArg, args);
       if (thisArg && thisArg.emit) {
