@@ -41,7 +41,7 @@ function sleep(ms: number): Promise<{}> {
 }
 
 
-export type PredicateFunction = (result: any) => boolean;
+export type PredicateFunction = (result: any, context: any[]) => boolean;
 
 /**
  * The options to pass to retry
@@ -101,7 +101,7 @@ export async function retry(
       }
       return result;
     } catch (err) {
-      if (!predicate || !predicate(err)) {
+      if (!predicate || !predicate(err, args)) {
         throw err;
       }
     }
