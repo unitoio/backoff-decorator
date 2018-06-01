@@ -116,6 +116,23 @@ describe('backoff', () => {
       }
     });
 
+    it('passes context to predicate function', async () => {
+      const fakeArgs = [1, 2];
+      try {
+        await Backoff.retry({
+          predicate: (err, context) => {
+            expect(context).to.be.instanceof(Array);
+            expect(context).to.eql(fakeArgs);
+            return false;
+          },
+        }, faultyCall, null, ...fakeArgs);
+
+        assert(false, 'function should throw');
+      } catch (err) {
+        expect(err.message).to.eql('foo');
+      }
+    });
+
     it('throws an error if maxRetries is reached', async () => {
       try {
         await Backoff.retry({
