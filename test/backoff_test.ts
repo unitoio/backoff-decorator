@@ -3,6 +3,7 @@
  * All Rights Reserved
  */
 import { assert, expect } from 'chai';
+import { EventEmitter } from 'events';
 
 import * as Backoff from '../src/backoff';
 
@@ -200,17 +201,38 @@ describe('backoff', () => {
 
   describe('backoff decorator', () => {
 
-    class Decotest {
+    class Decotest extends EventEmitter {
       offset = 10;
+      numErrors: number;
       numCalled = 0;
       backoffOptions = {
+        backoffFactor: 1,
         maxRetries: 3,
-        maxDelayMs: 1,
+        minDelayMs: 1,
+        maxDelayMs: 2,
         predicate: () => true,
       };
+      numRetries = 0;
+      throttleMessages: number[] = [];
+
+      constructor(numErrors: number = 0) {
+        super();
+        this.numErrors = numErrors;
+        this.on('retries', (fname, args, numRetries) => {
+          this.numRetries = numRetries;
+        });
+
+        this.on('throttle', (fname, args, delayMs) => {
+          this.throttleMessages.push(delayMs);
+        });
+      }
 
       @Backoff.backoff
       async add(x: number): Promise<number> {
+        this.numCalled++;
+        if (this.numCalled <= this.numErrors) {
+          throw new Error('bar');
+        }
         return x + this.offset;
       }
 
@@ -221,15 +243,14 @@ describe('backoff', () => {
       }
     }
 
-    const decotest = new Decotest();
-
-
     it('calls the target function with arguments', async () => {
+      const decotest = new Decotest();
       const result = await decotest.add(8);
       expect(result).to.eql(18);
     });
 
     it('uses the instance backoffOptions', async () => {
+      const decotest = new Decotest();
       try {
         await decotest.matchingCall();
         assert(false, 'function should throw');
@@ -237,6 +258,15 @@ describe('backoff', () => {
         expect(err.message).to.match(/Maximum of 3 retries/);
         expect(decotest.numCalled).to.eql(3);
       }
+    });
+
+    it('emits retries and throttle events', async () => {
+      const decotest = new Decotest(2);
+      await decotest.add(10);
+      expect(decotest.numCalled).to.eql(3);
+      expect(decotest.numRetries).to.eql(3);
+      expect(decotest.throttleMessages.length).to.eql(2);
+      expect(decotest.throttleMessages).to.eql([1, 2]);
     });
 
   });

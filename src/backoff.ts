@@ -111,6 +111,9 @@ export async function retry(
       throw new RetryError(`Maximum of ${maxRetries} retries reached when calling target ${targetFunction.name}`);
     }
     // sleep before retrying
+    if (thisArg && thisArg.emit) {
+      thisArg.emit('throttle', targetFunction.name, args, delayMs);
+    }
     await sleepFunction(delayMs);
   }
 }
