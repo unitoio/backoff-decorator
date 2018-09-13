@@ -22,8 +22,8 @@ export function* exponentialGenerator(
 ): IterableIterator<number> {
   let n = 0;
   while (true) { // tslint:disable-line
-    const current = factor * (base ** n);
-    let value = (!maxValue || current < maxValue) ? current : maxValue;
+    let value = factor * (base ** n);
+    value = maxValue ? Math.min(maxValue, value) : value;
     value = minValue ? Math.max(minValue, value) : value;
     if (fullJitter) {
       value = Math.round(Math.random() * value);
