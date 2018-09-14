@@ -21,6 +21,10 @@ export function* exponentialGenerator(
   fullJitter: boolean | undefined,
 ): IterableIterator<number> {
   let n = 0;
+  // handle contradicting params
+  if (minValue && maxValue && minValue > maxValue) {
+    minValue = maxValue;
+  }
   while (true) { // tslint:disable-line
     let value = factor * (base ** n);
     value = maxValue ? Math.min(maxValue, value) : value;
