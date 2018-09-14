@@ -1,6 +1,6 @@
 {
   "name": "backoff-decorator",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Exponential retry backoff library offering full jitter and decorators.",
   "main": "dist/src/backoff.js",
   "types": "dist/src/backoff.d.ts",
