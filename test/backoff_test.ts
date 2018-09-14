@@ -71,6 +71,12 @@ describe('backoff', () => {
       expect(values).to.eql(ten.map(x => 12));
     });
 
+    it('gives priority to max in case of contradicting params', () => {
+      const generator = Backoff.exponentialGenerator(1, 1000, 500, 100000, false);
+      const value = generator.next().value;
+      expect(value).to.eql(500);
+    });
+
   });
 
   describe('retry', () => {
