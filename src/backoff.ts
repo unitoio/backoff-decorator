@@ -1,5 +1,3 @@
-export class RetryError extends Error {}
-
 /**
  * Generator for an exponentially increasing value of power of two,
  * multiplied by a factor, up to a maximum value.
@@ -97,6 +95,7 @@ export async function retry(
   } = options;
 
   let numRetries = 1;
+  let originalError;
   for (const delayMs of exponentialGenerator(base, backoffFactor, maxDelayMs, minDelayMs, fullJitter)) {
     try {
       const result = await targetFunction.apply(thisArg, args);
@@ -105,6 +104,7 @@ export async function retry(
       }
       return result;
     } catch (err) {
+      originalError = err;
       if (!predicate || !predicate(err, args)) {
         throw err;
       }
@@ -112,7 +112,9 @@ export async function retry(
 
     numRetries++;
     if (numRetries > maxRetries) {
-      throw new RetryError(`Maximum of ${maxRetries} retries reached when calling target ${targetFunction.name}`);
+      // The last error that was raised before the max retries is reached
+      // will be the one thrown to the end-user.
+      throw originalError;
     }
     // sleep before retrying
     if (thisArg && thisArg.emit) {

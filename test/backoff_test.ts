@@ -148,8 +148,7 @@ describe('backoff', () => {
         }, faultyCall);
         assert(false, 'function should throw');
       } catch (err) {
-        expect(err.message).to.match(/Maximum of 2 retries/);
-        expect(err).to.be.instanceof(Backoff.RetryError);
+        expect(err.message).to.match(/foo/);
       }
     });
 
@@ -198,7 +197,7 @@ describe('backoff', () => {
         await decotest.matchingCall();
         assert(false, 'function should throw');
       } catch (err) {
-        expect(err.message).to.match(/Maximum of 2 retries/);
+        expect(err.message).to.match(/foo/);
       }
     });
 
@@ -261,7 +260,7 @@ describe('backoff', () => {
         await decotest.matchingCall();
         assert(false, 'function should throw');
       } catch (err) {
-        expect(err.message).to.match(/Maximum of 3 retries/);
+        expect(err.message).to.match(/foo/);
         expect(decotest.numCalled).to.eql(3);
       }
     });
