@@ -207,15 +207,6 @@ describe('backoff', () => {
       }
     });
 
-    it('throws a RetryError if maxRetries is reached', async () => {
-      try {
-        await decotest.matchingCall();
-        assert(false, 'function should throw');
-      } catch (err) {
-        expect(err.message).to.match(/Maximum of 2 retries/);
-      }
-    });
-
   });
 
 
