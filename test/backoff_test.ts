@@ -140,7 +140,7 @@ describe('backoff', () => {
       }
     });
 
-    it('throws an error if maxRetries is reached', async () => {
+    it('throws a RetryError if maxRetries is reached', async () => {
       try {
         await Backoff.retry({
           predicate: alwaysTrue,
@@ -148,7 +148,21 @@ describe('backoff', () => {
         }, faultyCall);
         assert(false, 'function should throw');
       } catch (err) {
-        expect(err.message).to.match(/foo/);
+        expect(err.message).to.match(/Maximum of 2 retries/);
+        expect(err).to.be.instanceof(Backoff.RetryError);
+      }
+    });
+
+    it('throws the original error if it does not match the predicate', async () => {
+      try {
+        await Backoff.retry({
+          predicate: alwaysFalse,
+          maxRetries: 2,
+        }, faultyCall);
+        assert(false, 'function should throw');
+      } catch (err) {
+        expect(err.message).not.to.match(/Maximum of 2 retries/);
+        expect(err).not.to.be.instanceof(Backoff.RetryError);
       }
     });
 
@@ -192,12 +206,12 @@ describe('backoff', () => {
       }
     });
 
-    it('throws an error if maxRetries is reached', async () => {
+    it('throws a RetryError if maxRetries is reached', async () => {
       try {
         await decotest.matchingCall();
         assert(false, 'function should throw');
       } catch (err) {
-        expect(err.message).to.match(/foo/);
+        expect(err.message).to.match(/Maximum of 2 retries/);
       }
     });
 
@@ -260,7 +274,7 @@ describe('backoff', () => {
         await decotest.matchingCall();
         assert(false, 'function should throw');
       } catch (err) {
-        expect(err.message).to.match(/foo/);
+        expect(err.message).to.match(/Maximum of 3 retries/);
         expect(decotest.numCalled).to.eql(3);
       }
     });
