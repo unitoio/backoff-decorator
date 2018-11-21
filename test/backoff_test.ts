@@ -163,6 +163,7 @@ describe('backoff', () => {
       } catch (err) {
         expect(err.message).not.to.match(/Maximum of 2 retries/);
         expect(err).not.to.be.instanceof(Backoff.RetryError);
+        expect(err.message).to.match(/foo/);
       }
     });
 

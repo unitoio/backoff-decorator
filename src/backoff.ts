@@ -109,8 +109,8 @@ export async function retry(
       return result;
     } catch (err) {
       originalError = err;
-      if (!predicate || !predicate(err, args)) {
-        throw err;
+      if (!predicate || !predicate(originalError, args)) {
+        throw originalError;
       }
     }
 
