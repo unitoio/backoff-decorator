@@ -3,10 +3,17 @@
  * multiplied by a factor, up to a maximum value.
  * Optionally add a full random jitter to that number.
  *
- * @param base       base of the exponential value, usually 2 or 1 for fix intervals
+ * @param base       base of the exponential value. Usually 2, or 1 for fix intervals
  * @param factor     value by which to multiply the power of base
  * @param maxValue   ceiling to the exponential value (not including the jitter)
- * @param fullJitter If true, add a random number between [0, n] to value n.
+ * @param minValue   floor to the exponential value (not including the jitter)
+ * @param jitter introduces non-determinism, generating numbers between 0 and the
+ *               deterministic / non-jittered value. Accepts a boolean or a number:
+ *               - `true` to enable *full* jitter: for each pre-jitter value
+ *                 equal to n, the jittered value will be anything in [0, n].
+ *               - A float between 0 and 1 to enable *partial* jitter,
+ *                 remaining closer to the non-jittered value.
+ *                 `0` is equivalent to no jitter, `1` to full jitter.
  *
  * @returns an iterator over the values generated.
  */
@@ -16,7 +23,7 @@ export function* exponentialGenerator(
   factor: number,
   maxValue: number | undefined,
   minValue: number | undefined,
-  fullJitter: boolean | undefined,
+  jitter: boolean | number | undefined,
 ): IterableIterator<number> {
   let n = 0;
   // handle contradicting params
@@ -27,8 +34,10 @@ export function* exponentialGenerator(
     let value = factor * (base ** n);
     value = maxValue ? Math.min(maxValue, value) : value;
     value = minValue ? Math.max(minValue, value) : value;
-    if (fullJitter) {
+    if (jitter === true) {
       value = Math.round(Math.random() * value);
+    } else if (typeof jitter === 'number' && jitter >= 0 && jitter <= 1) {
+      value = Math.round((1 - (jitter as number) * Math.random()) * value);
     }
     yield value;
     n++;
@@ -81,7 +90,7 @@ export async function retry(
   options: BackoffOptions,
   targetFunction: any,
   thisArg: any = null,
-  ...args: any[],
+  ...args: any[] // tslint:disable-line
 ): Promise<any> {
   const {
     base = 2,

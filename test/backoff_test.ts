@@ -51,6 +51,42 @@ describe('backoff', () => {
       }
     });
 
+    it('can add partial jitter, respecting a "jitteriness" factor', () => {
+      const jitteriness = 0.2;
+      const generator = Backoff.exponentialGenerator(2, 1, 1000, 0, jitteriness);
+      const values = ten.map(() => generator.next().value);
+
+      const expectedMin = ten.map(x => Math.round((2 ** x) * (1 - jitteriness)));
+      const expectedMax = ten.map(x => 2 ** x);
+      for (const idx in values) {
+        expect(values[idx]).not.to.be.below(expectedMin[idx]);
+        expect(values[idx]).not.to.be.above(expectedMax[idx]);
+      }
+    });
+
+    it('can add partial jitter, respecting a "jitteriness" factor equivalent to full jitter if 1', () => {
+      const jitteriness = 1;
+      const generator = Backoff.exponentialGenerator(2, 1, 1000, 0, jitteriness);
+      const values = ten.map(() => generator.next().value);
+
+      const expectedMax = ten.map(x => 2 ** x);
+      for (const idx in values) {
+        expect(values[idx]).not.to.be.below(0);
+        expect(values[idx]).not.to.be.above(expectedMax[idx]);
+      }
+    });
+
+    it('can add partial jitter, respecting a "jitteriness" factor equivalent to no jitter if 0', () => {
+      const jitteriness = 0;
+      const generator = Backoff.exponentialGenerator(2, 1, 1000, 0, jitteriness);
+      const values = ten.map(() => generator.next().value);
+
+      const expectedVal = ten.map(x => 2 ** x);
+      for (const idx in values) {
+        expect(values[idx]).to.eql(expectedVal[idx]);
+      }
+    });
+
     it('always returns rounded-up values', () => {
       const generator = Backoff.exponentialGenerator(2, 5, 1000, 0, true);
       const values = ten.map(() => generator.next().value);
