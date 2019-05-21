@@ -46,7 +46,7 @@
     "pre-commit": "^1.2.2",
     "remap-istanbul": "^0.9.5",
     "tslint": "^5.8.0",
-    "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^2.5.2"
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.3.4000"
   }
 }
