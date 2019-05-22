@@ -63,7 +63,8 @@ export type PredicateFunction = (result: any, context?: any[]) => boolean;
  * @param base          base of the exponential value, usually 2 or 1 for fix intervals
  * @param backoffFactor the factor to the exponential values
  * @param predicate     a function that returns true when the call is to be retried
- * @param fullJitter    whether to add full random jitter to the exponential delays
+ * @param fullJitter    whether to add jitter to the exponential delays.
+ *                      true/false for full/no jitter, number in [0, 1] for partial.
  * @param sleepFunction optional function for delaying an action. Useful for testing.
  */
 export interface BackoffOptions {
@@ -73,7 +74,7 @@ export interface BackoffOptions {
   base?: number;
   backoffFactor?: number;
   predicate?: PredicateFunction;
-  fullJitter?: boolean;
+  fullJitter?: boolean | number;
   sleepFunction?: (ms: number) => Promise<any>;
 }
 
