@@ -16,8 +16,6 @@ branches:
 build:
   ci:
     - shippable_retry npm ci
-    - npm run compile
-    - mkdir -p shippable/testresults shippable/codecoverage
     - npm run lint
     - npm run test:ci
 
