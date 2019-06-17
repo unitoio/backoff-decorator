@@ -22,7 +22,8 @@
     "test": "npm run compile && nyc mocha",
     "test:ci": "npm run compile && npm run audit && mkdir -p shippable/testresults shippable/codecoverage && nyc --reporter cobertura --report-dir shippable/codecoverage mocha -- --opts test/mocha.ci.opts",
     "test:watch": "nyc mocha -- --watch --watch-extensions ts",
-    "packages:lock:regenerate": "rm -rf node_modules package-lock.json; npm install --package-lock; npm out; true"
+    "packages:lock:regenerate": "rm -rf node_modules package-lock.json; npm install --package-lock; npm out; true",
+    "publish-to-npm": "npm login && npm version patch && git push --tags origin master && npm publish"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
