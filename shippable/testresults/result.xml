@@ -1,0 +1,25 @@
+<testsuite name="Mocha Tests" tests="23" failures="0" errors="0" skipped="0" timestamp="Mon, 17 Jun 2019 02:51:29 GMT" time="0.131">
+<testcase classname="backoff exponentialGenerator" name="returns powers of two" time="0.002"/>
+<testcase classname="backoff exponentialGenerator" name="returns maxValue when above it" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="returns minValue when below it" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="multiplies values by a factor" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="can add full jitter" time="0.001"/>
+<testcase classname="backoff exponentialGenerator" name="can add partial jitter, respecting a &#x22;jitteriness&#x22; factor" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="can add partial jitter, respecting a &#x22;jitteriness&#x22; factor equivalent to full jitter if 1" time="0.001"/>
+<testcase classname="backoff exponentialGenerator" name="can add partial jitter, respecting a &#x22;jitteriness&#x22; factor equivalent to no jitter if 0" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="always returns rounded-up values" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="uses the passed in base" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="supports a base of 1" time="0"/>
+<testcase classname="backoff exponentialGenerator" name="gives priority to max in case of contradicting params" time="0"/>
+<testcase classname="backoff retry" name="calls the target function with arguments" time="0.001"/>
+<testcase classname="backoff retry" name="can bind the target function" time="0.001"/>
+<testcase classname="backoff retry" name="throws error if not matching predicate" time="0"/>
+<testcase classname="backoff retry" name="passes context to predicate function" time="0"/>
+<testcase classname="backoff retry" name="throws an error if maxRetries is reached" time="0.053"/>
+<testcase classname="backoff backoffWith decorator" name="calls the target function with arguments" time="0.001"/>
+<testcase classname="backoff backoffWith decorator" name="throws error if not matching predicate" time="0.001"/>
+<testcase classname="backoff backoffWith decorator" name="throws an error if maxRetries is reached" time="0.051"/>
+<testcase classname="backoff backoff decorator" name="calls the target function with arguments" time="0.002"/>
+<testcase classname="backoff backoff decorator" name="uses the instance backoffOptions" time="0.005"/>
+<testcase classname="backoff backoff decorator" name="emits retries and throttle events" time="0.005"/>
+</testsuite>

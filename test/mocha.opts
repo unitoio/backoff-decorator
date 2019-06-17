@@ -1,0 +1,7 @@
+# https://mochajs.org/#mochaopts
+
+--require ts-node/register
+--require source-map-support/register
+--recursive
+--exit
+'test/**/*.ts'
