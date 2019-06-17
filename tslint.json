@@ -70,7 +70,6 @@
     "no-unused-expression": true,
     "radix": true,
     "no-shadowed-variable": true,
-    "no-use-before-declare": true,
     "array-bracket-spacing": [true, "never"],
     "block-spacing": [true, "never"],
     "brace-style": [true, "1tbs"],
