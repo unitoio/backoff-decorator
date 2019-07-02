@@ -1,6 +1,5 @@
 # https://mochajs.org/#mochaopts
 
---require ts-node/register
 --require source-map-support/register
 --recursive
 --exit
@@ -8,4 +7,4 @@
 --reporter xunit
 --no-colors
 --reporter-options output=shippable/testresults/result.xml
-'test/**/*.ts'
+'dist/test/**/*.js'
