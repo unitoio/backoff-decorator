@@ -25,6 +25,7 @@
     "publish-to-npm": "npm login && npm version patch && git push --tags origin master && npm publish"
   },
   "nyc": {
+    "cache": false,
     "check-coverage": true,
     "all": true,
     "lines": 25,
