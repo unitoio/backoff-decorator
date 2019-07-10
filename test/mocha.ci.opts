@@ -7,4 +7,3 @@
 --reporter xunit
 --no-colors
 --reporter-options output=shippable/testresults/result.xml
-'dist/test/**/*.js'
