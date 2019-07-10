@@ -3,4 +3,3 @@
 --require source-map-support/register
 --recursive
 --exit
-'dist/test/**/*.js'
