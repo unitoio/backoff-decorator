@@ -3,6 +3,8 @@
     "baseUrl": ".",
     "declaration": true,
     "experimentalDecorators": true,
+    "incremental": true,
+    "lib": ["es2017"],
     "listFiles": false,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -12,7 +14,7 @@
     "rootDir": ".",
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es6"
+    "target": "es2017"
   },
 
   "include": [

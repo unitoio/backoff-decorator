@@ -1,6 +1,10 @@
 {
   "name": "backoff-decorator",
   "version": "0.1.13",
+  "engines": {
+    "node": ">=10.14.1",
+    "npm": ">=6.4.1"
+  },
   "description": "Exponential retry backoff library offering full jitter and decorators.",
   "main": "dist/src/backoff.js",
   "types": "dist/src/backoff.d.ts",
@@ -14,14 +18,29 @@
     "clean": "rm -rf dist/ node_modules/ shippable/ coverage/ *.tgz",
     "compile": "tsc",
     "prepublishOnly": "npm run clean && npm install && npm run compile",
-    "lint": "tslint -c tslint.json --project tsconfig.json",
-    "test": "npm run compile && npm run coverage",
-    "test:ci": "mocha --ui tdd -R xunit 'dist/test/**/*.js' > shippable/testresults/result.xml",
-    "coverage": "istanbul cover -x '**/data/**' --print none _mocha 'dist/test/**/*_test.js' && npm run coverage:remap:json && npm run coverage:remap:html && npm run coverage:remap:xml && npm run coverage:report",
-    "coverage:remap:json": "cd coverage && remap-istanbul -i coverage.json -o coverage-remap.json",
-    "coverage:remap:html": "cd coverage && remap-istanbul -i coverage.json -o html-report -t html",
-    "coverage:remap:xml": "cd coverage && remap-istanbul -i coverage.json -o coverage.xml -t cobertura",
-    "coverage:report": "istanbul report -i coverage/coverage-remap.json --print text-summary"
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "npm run compile && nyc mocha",
+    "test:ci": "npm run compile && mkdir -p shippable/testresults shippable/codecoverage && nyc --reporter cobertura --report-dir shippable/codecoverage mocha -- --opts test/mocha.ci.opts",
+    "packages:lock:regenerate": "rm -rf node_modules package-lock.json; npm install --package-lock; npm out; true",
+    "publish-to-npm": "npm login && npm version patch && git push --tags origin master && npm publish"
+  },
+  "nyc": {
+    "cache": false,
+    "check-coverage": true,
+    "all": true,
+    "lines": 25,
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/scripts/**",
+      "**/*.d.ts",
+      "coverage/**",
+      "test/**",
+      "test{,-*}.ts",
+      "**/*{.,-}{test,spec}.ts",
+      "**/node_modules/**"
+    ]
   },
   "keywords": [
     "typescript",
@@ -41,12 +60,12 @@
     "@types/mocha": "^5.1.0",
     "@types/node": "^10.9.4",
     "chai": "^4.1.2",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.1.1",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
     "pre-commit": "^1.2.2",
-    "remap-istanbul": "^0.9.5",
+    "source-map-support": "^0.5.12",
     "tslint": "^5.8.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.5.2"
   }
 }

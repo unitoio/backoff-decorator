@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 8.15.0
+  - 10.15.1
 
 env:
   global:
@@ -16,14 +16,9 @@ branches:
 build:
   ci:
     - shippable_retry npm ci
-    - npm run compile
-    - mkdir -p shippable/testresults
-    - mkdir -p shippable/codecoverage
+    - npm run audit
     - npm run lint
     - npm run test:ci
-  on_success:
-    - npm run coverage
-    - cp coverage/coverage.xml shippable/codecoverage/coverage.xml
 
 integrations:
   notifications:

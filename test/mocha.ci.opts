@@ -1,0 +1,10 @@
+# https://mochajs.org/#mochaopts
+
+--require source-map-support/register
+--recursive
+--exit
+--timeout 60000
+--reporter xunit
+--no-colors
+--reporter-options output=shippable/testresults/result.xml
+'dist/test/**/*.js'
