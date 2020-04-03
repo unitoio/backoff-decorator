@@ -60,7 +60,7 @@
     "@types/mocha": "^5.1.0",
     "@types/node": "^10.9.4",
     "chai": "^4.1.2",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.3",
     "nyc": "^14.1.1",
     "pre-commit": "^1.2.2",
     "source-map-support": "^0.5.12",
