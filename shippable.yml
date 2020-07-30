@@ -8,17 +8,30 @@ env:
     # The path for Xunit to output test reports
     - XUNIT_FILE=shippable/testresults/result.xml
     - LC_ALL=C
-
+    # UNITO_NPM_REGISTRY_TOKEN
+    - secure: Pp7U5YtgYoYAgO/UFAuZbQb0esquqGpe2UjIxo03qhBLq6AAD96oX3VOPwheEfQpMckTUm7wMEid29A0z6ssHZ1YBrCLDGBFS3zntg/ITQ7XS9SYRsXJuufxTMSeRSyqQ8M13kYkBHZBkrenL9bcfiCnsryEhy4ZYASYKu4JnqHz1mh8ElSLIgwEoLNQIsbpimr3mbMTJKKMQ0tIB7fLctTv/dI34N48ESgYn5SXEqizUstY4p1tBIIWd6QY52zcRNWXiaFpo7PNOf0OEz9Qq9P9/tDOhRY+qYF0u1jU48W62IOKSYOtzz9LULaE5LrkcZseroykZ34g0G3y0MVXTA==
+      
 branches:
   only:
     - master
 
 build:
+  pre_ci_boot:
+    image_name: 418344807563.dkr.ecr.us-east-1.amazonaws.com/shippable-docker-images
+    image_tag: latest
+    pull: true
+    options: "-e HOME=/root" 
   ci:
     - shippable_retry npm ci
-    - npm run audit
+    - npm run audit-with-ignore
     - npm run lint
     - npm run test:ci
+  on_success:
+    - git remote set-url origin $REPOSITORY_URL
+    - git config --get remote.origin.url
+    - npm config set '//registry.npmjs.org/:_authToken' "${UNITO_NPM_REGISTRY_TOKEN}"
+    - bash bump_node_package_version.sh
+    - bash publish_node_package.sh
 
 integrations:
   notifications:
@@ -30,3 +43,8 @@ integrations:
       on_success: never
       on_pull_request: never
       on_start: never
+  hub:
+    - integrationName: shippable-docker-images
+      type: ecr
+      region: us-east-1
+
