@@ -14,7 +14,7 @@
     "email": "hello@unito.io"
   },
   "scripts": {
-    "audit": "npm audit",
+    "audit-with-ignore": "check-audit --production",
     "clean": "rm -rf dist/ node_modules/ shippable/ coverage/ *.tgz",
     "compile": "tsc",
     "prepublishOnly": "npm run clean && npm install && npm run compile",
@@ -52,7 +52,7 @@
   "pre-commit": [
     "lint",
     "test",
-    "audit"
+    "audit-with-ignore"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -61,6 +61,7 @@
     "@types/node": "^10.9.4",
     "chai": "^4.1.2",
     "mocha": "^6.2.3",
+    "npm-audit-resolver": "2.x",
     "nyc": "^14.1.1",
     "pre-commit": "^1.2.2",
     "source-map-support": "^0.5.12",
