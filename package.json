@@ -1,6 +1,6 @@
 {
   "name": "backoff-decorator",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "engines": {
     "node": ">=10.14.1",
     "npm": ">=6.4.1"
