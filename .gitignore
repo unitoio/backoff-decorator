@@ -7,4 +7,4 @@ node_modules
 *.swp
 coverage/
 .nyc_output/
-shippable/
+ci_output/

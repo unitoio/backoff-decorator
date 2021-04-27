@@ -15,12 +15,12 @@
   },
   "scripts": {
     "audit-with-ignore": "check-audit --production",
-    "clean": "rm -rf dist/ node_modules/ shippable/ coverage/ *.tgz",
+    "clean": "rm -rf dist/ node_modules/ ci_output/ coverage/ *.tgz",
     "compile": "tsc",
     "prepublishOnly": "npm run clean && npm install && npm run compile",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "npm run compile && nyc mocha 'dist/test/**/*.js'",
-    "test:ci": "npm run compile && mkdir -p shippable/testresults shippable/codecoverage && nyc --reporter cobertura --report-dir shippable/codecoverage mocha -- --opts test/mocha.ci.opts 'dist/test/**/*.js'",
+    "test:ci": "npm run compile && mkdir -p ci_output/testresults ci_output/codecoverage && mocha -- --opts test/mocha.ci.opts 'dist/test/**/*.js'",
     "packages:lock:regenerate": "rm -rf node_modules package-lock.json; npm install --package-lock; npm out; true",
     "publish-to-npm": "npm login && npm version patch && git push --tags origin master && npm publish"
   },
