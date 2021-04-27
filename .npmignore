@@ -3,4 +3,3 @@ test/
 dist/test/
 tsconfig.json
 tslint.json
-shippable.yml
